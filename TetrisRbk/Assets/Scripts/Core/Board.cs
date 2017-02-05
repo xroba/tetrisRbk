@@ -8,6 +8,7 @@ public class Board : MonoBehaviour {
     public int m_width = 10;
     public int m_height = 30;
     public int m_header = 8;	// Use this for initialization
+    public int m_completedRows = 0;
 
     public Transform[,] m_grid;
 
@@ -123,6 +124,7 @@ public class Board : MonoBehaviour {
 
             m_grid[x, y] = null;
         }
+       
     }
 
     void ShiftOneRowDown(int y)
@@ -148,6 +150,7 @@ public class Board : MonoBehaviour {
 
     public void ClearAllRows()
     {
+        m_completedRows = 0;
         for(int y=0; y < m_height; y++)
         {
             if (IsCompleteLine(y))
@@ -155,9 +158,11 @@ public class Board : MonoBehaviour {
                 ClearRow(y);
                 ShiftRowsDown(y+1);
                 y--;
+
+                m_completedRows++;
             }
         }
-
+       
     }
 
     public bool IsOverLimit(Shape shape)

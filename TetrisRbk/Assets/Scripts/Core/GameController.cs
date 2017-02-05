@@ -9,12 +9,18 @@ public class GameController : MonoBehaviour {
     Shape m_activeShape;
     bool m_gameOver = false;
     public GameObject m_gameOverPanel;
+    public GameObject m_PausePanel;
     public float m_dropInterval = 0.5f;
     float m_timeDropShape = 1f;
-   // float m_timeToNextKey;
+    SoundManager m_soundManager;
+    bool m_isPause = false;
+    
+    public ToggleIcon m_rotateToggleIcon;
+    bool m_rotateRight = true;
+    // float m_timeToNextKey;
 
-  //  [Range(0.02f, 1f)]
-  //  public float m_keyRepeatRate = 0.25f;
+    //  [Range(0.02f, 1f)]
+    //  public float m_keyRepeatRate = 0.25f;
 
     float m_timeToNextLeftRightKey;
     [Range(0.02f, 1f)]
@@ -33,15 +39,22 @@ public class GameController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        Time.timeScale = 1f;
         m_board = GameObject.FindObjectOfType<Board>();
         m_spawner = GameObject.FindObjectOfType<Spawner>();
         m_timeToNextLeftRightKey = Time.time;
         m_timeToRotate = Time.time;
         m_timeToDropDownKey = Time.time;
+        m_soundManager = FindObjectOfType<SoundManager>();
 
         if (m_activeShape == null)
         {
             m_activeShape = m_spawner.SpawnShape();
+        }
+
+        if (m_PausePanel.active)
+        {
+            m_PausePanel.SetActive(false);
         }
     }
 	
@@ -84,33 +97,44 @@ public class GameController : MonoBehaviour {
         {
 
             m_activeShape.MoveLeft();
+            m_soundManager.PlayFxMove();
             m_timeToNextLeftRightKey = Time.time + m_LeftRighRepeatRate;
 
             if (!m_board.IsValidPosition(m_activeShape))
             {
                 m_activeShape.MoveRight();
+                m_soundManager.PlayFxErrorSound();
             }
         }
 
         else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetButton("MoveRight") && Time.time > m_timeToNextLeftRightKey)
         {
+
             m_activeShape.MoveRight();
+            m_soundManager.PlayFxMove();
             m_timeToNextLeftRightKey = Time.time + m_LeftRighRepeatRate;
 
             if (!m_board.IsValidPosition(m_activeShape))
             {
                 m_activeShape.MoveLeft();
+                m_soundManager.PlayFxErrorSound();
             }
         }
 
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Rotate") && Time.time > m_timeToRotate) 
         {
             m_timeToRotate = Time.time + m_RotateRepeatRate;
-            m_activeShape.RotateRight();
+
+
+            RotateclockWise(m_rotateRight);
+           
+            m_soundManager.PlayFxMove();
 
             if (!m_board.IsValidPosition(m_activeShape))
             {
-                m_activeShape.RotateLeft();
+                RotateclockWise(!m_rotateRight);
+                m_soundManager.PlayFxErrorSound();
+                //m_activeShape.RotateLeft();
             }     
         }
 
@@ -126,6 +150,7 @@ public class GameController : MonoBehaviour {
                 if (m_board.IsOverLimit(m_activeShape))
                 {
                     GameOver();
+                    m_soundManager.PlayFxGameOver();
                 }
                 else
                 {
@@ -149,6 +174,8 @@ public class GameController : MonoBehaviour {
 
     private void LandShape()
     {
+        m_soundManager.PlayFxLand();
+
         m_timeToNextLeftRightKey = Time.time;
         m_timeToDropDownKey = Time.time;
         m_timeToRotate = Time.time;
@@ -158,6 +185,55 @@ public class GameController : MonoBehaviour {
         m_activeShape = m_spawner.SpawnShape();
 
         m_board.ClearAllRows();
+
+        if (m_board.m_completedRows > 0)
+        {
+
+            switch (m_board.m_completedRows)
+            {
+                case 2 :
+                    m_soundManager.PlayVocalDoubleKill();
+                    break;
+                case 3:
+                    m_soundManager.PlayVocalHattrick();
+                    break;
+
+                case 4:
+                    m_soundManager.PlayVocalKillingSpree();
+                    break;
+                default:
+                    m_soundManager.PlayFxClearRow();
+                    break;
+            }
+
+           
+        }
+    }
+
+    public void ToggleRotate()
+    {
+        if (m_rotateRight)
+        {
+            m_rotateRight = false;
+            
+        } else
+        {
+            m_rotateRight = true;
+        }
+
+        m_rotateToggleIcon.SetToggleIconOnOff(m_rotateRight);
+    }
+
+    public void RotateclockWise(bool clockwise)
+    {
+        if (clockwise)
+        {
+            m_activeShape.RotateRight();
+        }
+        else
+        {
+            m_activeShape.RotateLeft();
+        }
     }
 
     public void Restart()
@@ -165,5 +241,16 @@ public class GameController : MonoBehaviour {
         //Application.LoadLevel(Application.loadedLevel);
         m_gameOverPanel.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void TogglePause()
+    {
+        m_isPause = !m_isPause;
+
+
+        m_PausePanel.SetActive(m_isPause);
+
+        Time.timeScale = (m_isPause) ? 0 : 1;
+
     }
 }
