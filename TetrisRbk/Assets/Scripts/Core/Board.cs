@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Board : MonoBehaviour {
@@ -9,6 +10,7 @@ public class Board : MonoBehaviour {
     public int m_height = 30;
     public int m_header = 8;	// Use this for initialization
     public int m_completedRows = 0;
+    public Text m_scoreTxtComponent;
 
     public Transform[,] m_grid;
 

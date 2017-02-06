@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour {
     public AudioClip m_dropSound;
     public AudioClip m_gameoverSound;
     public AudioClip m_errorSound;
+    public AudioClip m_vocalLevelUp;
     public AudioClip[] m_backgroundMusic;
     public AudioClip[] m_vocalLineCompleted;
     public AudioSource m_musicSource;
@@ -78,7 +79,10 @@ public class SoundManager : MonoBehaviour {
     {
         PlayFxSound(m_vocalLineCompleted[2]);
     }
-
+    public void PlayVocalLevelUp()
+    {
+        PlayFxSound(m_vocalLevelUp);
+    }
 
 
     void PlayFxSound(AudioClip clip)

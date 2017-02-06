@@ -11,9 +11,11 @@ public class GameController : MonoBehaviour {
     public GameObject m_gameOverPanel;
     public GameObject m_PausePanel;
     public float m_dropInterval = 0.5f;
+    float m_dropIntervalModded;
     float m_timeDropShape = 1f;
     SoundManager m_soundManager;
     bool m_isPause = false;
+    ScoreManager m_scoreManager;
     
     public ToggleIcon m_rotateToggleIcon;
     bool m_rotateRight = true;
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour {
         m_timeToRotate = Time.time;
         m_timeToDropDownKey = Time.time;
         m_soundManager = FindObjectOfType<SoundManager>();
+        m_scoreManager = FindObjectOfType<ScoreManager>();
 
         if (m_activeShape == null)
         {
@@ -56,10 +59,13 @@ public class GameController : MonoBehaviour {
         {
             m_PausePanel.SetActive(false);
         }
+
+        m_dropIntervalModded  = m_dropInterval;
+
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         if (m_gameOver)
         {
@@ -93,7 +99,7 @@ public class GameController : MonoBehaviour {
 
     private void PlayerInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Q) || Input.GetButton("MoveLeft") && Time.time > m_timeToNextLeftRightKey || Input.GetButtonDown("MoveLeft"))
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.Q) || Input.GetButton("MoveLeft")) && Time.time > m_timeToNextLeftRightKey || Input.GetButtonDown("MoveLeft"))
         {
 
             m_activeShape.MoveLeft();
@@ -107,7 +113,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetButton("MoveRight") && Time.time > m_timeToNextLeftRightKey)
+        else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetButton("MoveRight")) && Time.time > m_timeToNextLeftRightKey)
         {
 
             m_activeShape.MoveRight();
@@ -121,7 +127,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Rotate") && Time.time > m_timeToRotate) 
+        else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Rotate")) && Time.time > m_timeToRotate) 
         {
             m_timeToRotate = Time.time + m_RotateRepeatRate;
 
@@ -138,10 +144,10 @@ public class GameController : MonoBehaviour {
             }     
         }
 
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || Input.GetButton("MoveDown") && Time.time > m_timeToDropDownKey || Time.time > m_timeDropShape)
+        else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || Input.GetButton("MoveDown") && Time.time > m_timeToDropDownKey) || Time.time > m_timeDropShape)
         {
-            m_timeToDropDownKey = Time.time + m_DropDownRepeatRate ;
-            m_timeDropShape = m_dropInterval + Time.time;
+            m_timeToDropDownKey = Time.time + m_DropDownRepeatRate;
+            m_timeDropShape = m_dropIntervalModded + Time.time;
 
             m_activeShape.MoveDown();
 
@@ -188,25 +194,32 @@ public class GameController : MonoBehaviour {
 
         if (m_board.m_completedRows > 0)
         {
-
-            switch (m_board.m_completedRows)
+            m_scoreManager.ScoreLines(m_board.m_completedRows);
+            
+            if(m_scoreManager.m_didLevelUp)
             {
-                case 2 :
-                    m_soundManager.PlayVocalDoubleKill();
-                    break;
-                case 3:
-                    m_soundManager.PlayVocalHattrick();
-                    break;
+                m_soundManager.PlayVocalLevelUp();
+                m_dropIntervalModded -=  0.1f * m_scoreManager.m_level;
 
-                case 4:
-                    m_soundManager.PlayVocalKillingSpree();
-                    break;
-                default:
-                    m_soundManager.PlayFxClearRow();
-                    break;
-            }
 
-           
+            } else
+            {
+                switch (m_board.m_completedRows)
+                {
+                    case 2:
+                        m_soundManager.PlayVocalDoubleKill();
+                        break;
+                    case 3:
+                        m_soundManager.PlayVocalHattrick();
+                        break;
+                    case 4:
+                        m_soundManager.PlayVocalKillingSpree();
+                        break;
+                    default:
+                        m_soundManager.PlayFxClearRow();
+                        break;
+                }
+            }        
         }
     }
 
