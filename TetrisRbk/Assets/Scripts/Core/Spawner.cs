@@ -21,6 +21,10 @@ public class Spawner : MonoBehaviour {
         Shape shape = null;
         shape = Instantiate(GetRandomShape(), transform.position, Quaternion.identity) as Shape;
 
+        //create a ghost
+       
+
+
         return shape;
 
     }

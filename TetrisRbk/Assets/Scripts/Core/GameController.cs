@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour {
     Board m_board;
     Spawner m_spawner;
     Shape m_activeShape;
+    Shape m_activeGhost;
     bool m_gameOver = false;
     public GameObject m_gameOverPanel;
     public GameObject m_PausePanel;
@@ -73,6 +74,23 @@ public class GameController : MonoBehaviour {
         }
       //  FakeGravity();
         PlayerInput();
+       
+    }
+
+    public void ShadowShape()
+    {
+
+        if (m_activeShape == null)
+            return;
+
+        GameObject cloneShape = Instantiate(m_activeShape.transform.gameObject);
+
+        foreach(Transform childClone in cloneShape.transform)
+        {
+           SpriteRenderer spriteClone = childClone.GetComponent<SpriteRenderer>();
+            spriteClone.color = Color.grey;
+        }
+
 
     }
 
@@ -113,7 +131,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetButton("MoveRight")) && Time.time > m_timeToNextLeftRightKey)
+        else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKey(KeyCode.D) || Input.GetButton("MoveRight")) && Time.time > m_timeToNextLeftRightKey)
         {
 
             m_activeShape.MoveRight();
@@ -127,7 +145,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Rotate")) && Time.time > m_timeToRotate) 
+        else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKey(KeyCode.Z) || Input.GetButtonDown("Rotate")) && Time.time > m_timeToRotate) 
         {
             m_timeToRotate = Time.time + m_RotateRepeatRate;
 
@@ -144,7 +162,7 @@ public class GameController : MonoBehaviour {
             }     
         }
 
-        else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || Input.GetButton("MoveDown") && Time.time > m_timeToDropDownKey) || Time.time > m_timeDropShape)
+        else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || Input.GetKey(KeyCode.S) ||  Input.GetButton("MoveDown") && Time.time > m_timeToDropDownKey) || Time.time > m_timeDropShape)
         {
             m_timeToDropDownKey = Time.time + m_DropDownRepeatRate;
             m_timeDropShape = m_dropIntervalModded + Time.time;
