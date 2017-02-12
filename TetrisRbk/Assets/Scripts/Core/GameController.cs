@@ -7,7 +7,9 @@ public class GameController : MonoBehaviour {
     Board m_board;
     Spawner m_spawner;
     Shape m_activeShape;
-    Shape m_activeGhost;
+    Ghost m_ghost;
+
+
     bool m_gameOver = false;
     public GameObject m_gameOverPanel;
     public GameObject m_PausePanel;
@@ -39,7 +41,6 @@ public class GameController : MonoBehaviour {
 
 
 
-
     // Use this for initialization
     void Start () {
         Time.timeScale = 1f;
@@ -50,6 +51,8 @@ public class GameController : MonoBehaviour {
         m_timeToDropDownKey = Time.time;
         m_soundManager = FindObjectOfType<SoundManager>();
         m_scoreManager = FindObjectOfType<ScoreManager>();
+        m_ghost = FindObjectOfType<Ghost>();
+
 
         if (m_activeShape == null)
         {
@@ -72,27 +75,17 @@ public class GameController : MonoBehaviour {
         {
             return;
         }
-      //  FakeGravity();
         PlayerInput();
-       
     }
 
-    public void ShadowShape()
+    void LateUpdate()
     {
-
-        if (m_activeShape == null)
-            return;
-
-        GameObject cloneShape = Instantiate(m_activeShape.transform.gameObject);
-
-        foreach(Transform childClone in cloneShape.transform)
+        if (m_ghost)
         {
-           SpriteRenderer spriteClone = childClone.GetComponent<SpriteRenderer>();
-            spriteClone.color = Color.grey;
+            m_ghost.CreateGhost(m_activeShape, m_board);
         }
-
-
     }
+
 
     //private void FakeGravity()
     //{
@@ -121,6 +114,8 @@ public class GameController : MonoBehaviour {
         {
 
             m_activeShape.MoveLeft();
+           // m_activeGhost.MoveLeft();
+
             m_soundManager.PlayFxMove();
             m_timeToNextLeftRightKey = Time.time + m_LeftRighRepeatRate;
 
@@ -135,6 +130,7 @@ public class GameController : MonoBehaviour {
         {
 
             m_activeShape.MoveRight();
+           // m_activeGhost.MoveRight();
             m_soundManager.PlayFxMove();
             m_timeToNextLeftRightKey = Time.time + m_LeftRighRepeatRate;
 
@@ -179,6 +175,7 @@ public class GameController : MonoBehaviour {
                 else
                 {
                     LandShape();
+                    m_ghost.Reset();
                 }
                 
             }

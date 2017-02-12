@@ -4,7 +4,8 @@ using System.Collections;
 public class Shape : MonoBehaviour {
 
    public bool m_canRotate = true;
-	// Use this for initialization
+    Board m_board;
+    // Use this for initialization
 
     public void Move(Vector3 direction)
     {
@@ -50,14 +51,13 @@ public class Shape : MonoBehaviour {
     }
 
     void Start () {
-        
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
       
     }
-
 
 
 }
