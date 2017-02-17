@@ -23,9 +23,9 @@ public class Shade : MonoBehaviour {
 
         m_graphic = GetComponent<MaskableGraphic>();
 
-        Debug.Log("m_startAlpha =" + m_startAlpha);
-        Debug.Log("m_targetAlpha =" + m_targetAlpha);
-        Debug.Log("m_timeToFade =" + m_timeToFade);
+       // Debug.Log("m_startAlpha =" + m_startAlpha);
+       // Debug.Log("m_targetAlpha =" + m_targetAlpha);
+       // Debug.Log("m_timeToFade =" + m_timeToFade);
 
 
         //m_inc = (m_startAlpha - m_targetAlpha) / m_timeToFade * Time.deltaTime;

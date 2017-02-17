@@ -7,28 +7,28 @@ public class Spawner : MonoBehaviour {
 
     public Shape[] m_allShapes;
     Board m_board;
-    List<Shape> allNextShape;
+    public List<Shape> m_AllNextShape;
 
-    public GameObject queueSpace1;
-    public GameObject queueSpace2;
-    public GameObject queueSpace3;
+    public GameObject[] queueSpace;
 
 
-    // Use this for initialization
-    void Start () {
-        this.transform.position =  VectorF.RoundVector(this.transform.position);
-        allNextShape = new List<Shape>();
 
 
-    }
 
     void Awake()
     {
         m_board = GameObject.FindObjectOfType<Board>();
-        allNextShape = new List<Shape>();
+        m_AllNextShape = new List<Shape>();
         GenerateNextShape();
+
     }
 
+    // Use this for initialization
+    void Start()
+    {
+        this.transform.position = VectorF.RoundVector(this.transform.position);
+        
+    }
     // Update is called once per frame
     void Update () {
 	   
@@ -46,23 +46,27 @@ public class Spawner : MonoBehaviour {
 
     void GenerateNextShape()
     {
-        while (allNextShape.Count < 3)
+        int i = 0;
+        while (m_AllNextShape.Count < 3)
         {
-            allNextShape.Add(GetRandomShape());
+            Shape randomShape = GetRandomShape();
+     
+            m_AllNextShape.Add(randomShape);
+            Instantiate(randomShape, queueSpace[i].transform.position, Quaternion.identity);
 
+            i++;
         }
         //fill it on the 3 xform
-        Instantiate(allNextShape[0], queueSpace1.transform.position, Quaternion.identity);
-        Instantiate(allNextShape[1], queueSpace2.transform.position, Quaternion.identity);
-        Instantiate(allNextShape[2], queueSpace3.transform.position, Quaternion.identity);
+
     }
 
     Shape GetNextShape()
     {
-        Shape nextShape = allNextShape.First();
+      //  GenerateNextShape();
+        Shape nextShape = m_AllNextShape.First();
 
-        allNextShape.RemoveAt(0);
-        GenerateNextShape();
+        m_AllNextShape.RemoveAt(0);
+       
 
         return nextShape;
     }
