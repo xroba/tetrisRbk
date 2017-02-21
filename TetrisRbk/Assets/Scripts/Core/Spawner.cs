@@ -19,7 +19,7 @@ public class Spawner : MonoBehaviour {
     {
         m_board = GameObject.FindObjectOfType<Board>();
         m_AllNextShape = new List<Shape>();
-        GenerateNextShape();
+        initQueue();
 
     }
 
@@ -37,36 +37,61 @@ public class Spawner : MonoBehaviour {
     public Shape SpawnShape()
     {
 
-        Shape shape = null;
-        shape = Instantiate(GetNextShape(), transform.position, Quaternion.identity) as Shape;
+        Shape nextShape = null;
+        nextShape = GetNextShape();
+        // Shape shape = Instantiate(nextShape, transform.position, Quaternion.identity) as Shape;
 
-        return shape;
+        //shape = GetNextShape();
+        nextShape.transform.position = transform.position;
+        nextShape.transform.localScale =  Vector3.one;
 
+        return nextShape;
+
+    }
+
+
+    void initQueue()
+    {
+        m_AllNextShape.Clear();
+
+        int i = 0;
+        while (m_AllNextShape.Count < 3)
+        {
+            Shape tmpShape = GetRandomShape();
+            Shape randomShape = null;
+            randomShape = Instantiate(tmpShape, transform.position, Quaternion.identity);
+            randomShape.transform.position = queueSpace[i].transform.position + tmpShape.m_queueOffset;
+            randomShape.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+            m_AllNextShape.Add(randomShape);
+            tmpShape = null;
+            i++;
+        }
     }
 
     void GenerateNextShape()
     {
-        int i = 0;
-        while (m_AllNextShape.Count < 3)
+
+        for (int i = 0; i < m_AllNextShape.Count; i++)
         {
-            Shape randomShape = GetRandomShape();
-     
-            m_AllNextShape.Add(randomShape);
-            Instantiate(randomShape, queueSpace[i].transform.position, Quaternion.identity);
+            m_AllNextShape[i].transform.position = queueSpace[i].transform.position + m_AllNextShape[i].m_queueOffset;
 
-            i++;
         }
-        //fill it on the 3 xform
 
+        //generate last one.
+        Shape tmpShape = GetRandomShape();
+        Shape newShape = Instantiate(tmpShape, queueSpace[m_AllNextShape.Count].transform.position + tmpShape.m_queueOffset, Quaternion.identity);
+        newShape.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+        m_AllNextShape.Add(newShape);
     }
 
     Shape GetNextShape()
     {
       //  GenerateNextShape();
         Shape nextShape = m_AllNextShape.First();
-
         m_AllNextShape.RemoveAt(0);
-       
+        GenerateNextShape();
 
         return nextShape;
     }

@@ -5,6 +5,7 @@ public class Shape : MonoBehaviour {
 
    public bool m_canRotate = true;
     Board m_board;
+   public Vector3 m_queueOffset;
     // Use this for initialization
 
     public void Move(Vector3 direction)
