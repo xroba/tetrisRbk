@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TetrisRbk", "TetrisRbk.csproj", "{B46FE882-F73F-C3C5-9DD6-F31F445FD471}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TetrisRbk.CSharp", "TetrisRbk.CSharp.csproj", "{F4FC1B85-BD2E-9D58-EF78-8CCBDFD92138}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B46FE882-F73F-C3C5-9DD6-F31F445FD471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B46FE882-F73F-C3C5-9DD6-F31F445FD471}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B46FE882-F73F-C3C5-9DD6-F31F445FD471}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B46FE882-F73F-C3C5-9DD6-F31F445FD471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4FC1B85-BD2E-9D58-EF78-8CCBDFD92138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4FC1B85-BD2E-9D58-EF78-8CCBDFD92138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4FC1B85-BD2E-9D58-EF78-8CCBDFD92138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4FC1B85-BD2E-9D58-EF78-8CCBDFD92138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
