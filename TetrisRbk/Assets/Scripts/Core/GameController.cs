@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour {
     SoundManager m_soundManager;
     bool m_isPause = false;
     ScoreManager m_scoreManager;
+    Holder m_holder;
     
     public ToggleIcon m_rotateToggleIcon;
     bool m_rotateRight = true;
@@ -46,6 +47,7 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 1f;
         m_board = GameObject.FindObjectOfType<Board>();
         m_spawner = GameObject.FindObjectOfType<Spawner>();
+        m_holder = GameObject.FindObjectOfType<Holder>();
         m_timeToNextLeftRightKey = Time.time;
         m_timeToRotate = Time.time;
         m_timeToDropDownKey = Time.time;
@@ -181,7 +183,35 @@ public class GameController : MonoBehaviour {
             }
 
 
+        } else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // toggle between current active and toggle if exist, if not just put it on hold
+             if(m_holder.HasShape() == true)
+            {
+
+                Shape tmpShape = m_holder.RetrieveHoldShape();
+                Transform tmpPosition = m_activeShape.transform;
+                tmpShape.transform.position = new Vector3(tmpPosition.position.x, tmpPosition.position.y, tmpPosition.position.z);
+                tmpShape.transform.localScale = Vector3.one;
+
+
+                m_holder.PutShapeOnHold(m_activeShape);
+
+                m_activeShape = tmpShape;
+                //   m_activeShape.transform.position = tmpPosition.position;
+               
+                m_ghost.Reset();
+            }   else
+            {
+                m_holder.PutShapeOnHold(m_activeShape);
+                m_activeShape = m_spawner.SpawnShape();
+                m_ghost.Reset();
+            }
+
+
         }
+
+
     }
 
     private void GameOver()
