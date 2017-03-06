@@ -215,28 +215,31 @@ public class Board : MonoBehaviour {
 
             if (IsCompleteLine(y))
             {
-               // Transform rowGlowFx = Instantiate(m_rowGlowFx);
-                GameObject mrowGlowFx = Instantiate(Resources.Load("GlowingRowFx")) as GameObject ;
 
-                mrowGlowFx.transform.position = new Vector3(0f, y, -1.1f);
-                Debug.Log("Play row fx on y = " + y);
-                Particles particles = mrowGlowFx.GetComponent<Particles>();
+               Transform rowGlowFx = Instantiate(m_rowGlowFx);
+                rowGlowFx.transform.position = new Vector3(0f, y, -1.1f);
+               // Debug.Log("Play row fx on y = " + y);
+                Particles particles = rowGlowFx.GetComponent<Particles>();
 
                 particles.PlayParticle();
+                StartCoroutine(KillingMyself(rowGlowFx));
             }
         }
     }
 
     public void PlayLandingShapeGlowFx(Shape shape)
     {
-        foreach(Transform square in shape.transform)
+        foreach (Transform square in shape.transform)
         {
-          Transform SquareFx = Instantiate(m_squareGlowfx, new Vector3(square.position.x,square.position.y + 1 ,-1.1f), Quaternion.identity ) ;
-
+            Transform SquareFx = Instantiate(m_squareGlowfx, new Vector3(square.position.x, square.position.y + 1, -1.1f), Quaternion.identity);
             SquareFx.GetComponent<Particles>().PlayParticle();
+            StartCoroutine(KillingMyself(SquareFx));
         }
+    }
 
-
-
+    public IEnumerator KillingMyself(Transform SquareFx)
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(SquareFx.gameObject);
     }
 }
