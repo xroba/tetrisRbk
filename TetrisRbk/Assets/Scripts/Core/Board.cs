@@ -229,12 +229,12 @@ public class Board : MonoBehaviour {
 
     public void PlayLandingShapeGlowFx(Shape shape)
     {
-        //foreach(Transform square in shape.transform)
-        //{
-        //  Transform SquareFx = Instantiate(m_squareGlowfx, new Vector3(square.position.x,square.position.y,-1.1f), Quaternion.identity ) ;
+        foreach(Transform square in shape.transform)
+        {
+          Transform SquareFx = Instantiate(m_squareGlowfx, new Vector3(square.position.x,square.position.y + 1 ,-1.1f), Quaternion.identity ) ;
 
-        //    SquareFx.GetComponent<Particles>().PlayParticle();
-        //}
+            SquareFx.GetComponent<Particles>().PlayParticle();
+        }
 
 
 
