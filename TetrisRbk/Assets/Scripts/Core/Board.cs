@@ -11,6 +11,8 @@ public class Board : MonoBehaviour {
     public int m_header = 8;	// Use this for initialization
     public int m_completedRows = 0;
     public Text m_scoreTxtComponent;
+    public Transform m_rowGlowFx;
+    public Transform m_squareGlowfx;
 
     public Transform[,] m_grid;
 
@@ -105,7 +107,7 @@ public class Board : MonoBehaviour {
 
     public bool IsCompleteLine(int y)
     {
-        Debug.Log("check on y = " + y);
+       // Debug.Log("check on y = " + y);
         for(int x = 0;  x < m_width; x++)
         {
             if (m_grid[x,y] == null)
@@ -121,7 +123,7 @@ public class Board : MonoBehaviour {
         for (int x = 0; x < m_width; x++)
         {
             if ( m_grid[x,y] != null ){
-                Destroy(m_grid[x, y].gameObject);
+                Destroy(m_grid[x, y].gameObject);        
             }
 
             m_grid[x, y] = null;
@@ -150,22 +152,49 @@ public class Board : MonoBehaviour {
         }
     }
 
-    public void ClearAllRows()
+    public IEnumerator ClearAllRows()
     {
-        m_completedRows = 0;
-        for(int y=0; y < m_height; y++)
+        m_completedRows = 0; //for scoring :-)
+
+        PlayRowDeleteFx();
+        yield return new WaitForSeconds(0.3f);
+
+        for (int y = 0; y < m_height; y++)
         {
             if (IsCompleteLine(y))
             {
+
                 ClearRow(y);
-                ShiftRowsDown(y+1);
+                m_completedRows++;
+                ShiftRowsDown(y + 1);
+                yield return new WaitForSeconds(0.2f);
                 y--;
 
-                m_completedRows++;
             }
         }
-       
+
+
+
     }
+
+    //public void ClearAllRows()
+    //{
+    //    Debug.Log("Delete Line");
+    //    m_completedRows = 0; //for scoring :-)
+    //   // PlayRowDeleteFx();
+
+    //    for (int y = 0; y < m_height; y++)
+    //    {
+    //        if (IsCompleteLine(y))
+    //        {
+    //            ClearRow(y);
+    //            m_completedRows++;
+    //            ShiftRowsDown(y + 1);
+    //            y--;
+
+    //        }
+    //    }
+    //}
 
     public bool IsOverLimit(Shape shape)
     {
@@ -177,5 +206,37 @@ public class Board : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    public void PlayRowDeleteFx()
+    {
+
+        for(int y = 0; y < m_height; y++){
+
+            if (IsCompleteLine(y))
+            {
+               // Transform rowGlowFx = Instantiate(m_rowGlowFx);
+                GameObject mrowGlowFx = Instantiate(Resources.Load("GlowingRowFx")) as GameObject ;
+
+                mrowGlowFx.transform.position = new Vector3(0f, y, -1.1f);
+                Debug.Log("Play row fx on y = " + y);
+                Particles particles = mrowGlowFx.GetComponent<Particles>();
+
+                particles.PlayParticle();
+            }
+        }
+    }
+
+    public void PlayLandingShapeGlowFx(Shape shape)
+    {
+        //foreach(Transform square in shape.transform)
+        //{
+        //  Transform SquareFx = Instantiate(m_squareGlowfx, new Vector3(square.position.x,square.position.y,-1.1f), Quaternion.identity ) ;
+
+        //    SquareFx.GetComponent<Particles>().PlayParticle();
+        //}
+
+
+
     }
 }

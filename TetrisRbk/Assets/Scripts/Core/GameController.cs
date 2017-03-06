@@ -226,6 +226,7 @@ public class GameController : MonoBehaviour {
     private void LandShape()
     {
         m_soundManager.PlayFxLand();
+        m_board.PlayLandingShapeGlowFx(m_activeShape);
 
         m_timeToNextLeftRightKey = Time.time;
         m_timeToDropDownKey = Time.time;
@@ -235,7 +236,8 @@ public class GameController : MonoBehaviour {
 
         m_activeShape = m_spawner.SpawnShape();
 
-        m_board.ClearAllRows();
+        //m_board.ClearAllRows();
+        m_board.StartCoroutine("ClearAllRows");
 
         if (m_board.m_completedRows > 0)
         {

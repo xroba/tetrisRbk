@@ -8,14 +8,17 @@ public class Particles : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        allParticles = GetComponentsInChildren<ParticleSystem>();
+       // allParticles = GetComponentsInChildren<ParticleSystem>();
 	}
 	
 
     public void PlayParticle()
     {
-        foreach(ParticleSystem ps in allParticles)
+        allParticles = GetComponentsInChildren<ParticleSystem>();
+
+        foreach (ParticleSystem ps in allParticles)
         {
+            Debug.Log("Play Particles");
             ps.Stop();
             ps.Play();
         }
