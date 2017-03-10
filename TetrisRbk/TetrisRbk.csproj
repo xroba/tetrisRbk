@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Core\Shape.cs" />
     <Compile Include="Assets\Scripts\Core\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Core\Spawner.cs" />
+    <Compile Include="Assets\Scripts\Helper\KillMyself.cs" />
     <Compile Include="Assets\Scripts\Helper\Shade.cs" />
     <Compile Include="Assets\Scripts\Helper\ToggleIcon.cs" />
     <Compile Include="Assets\Scripts\Helper\VectorF.cs" />
