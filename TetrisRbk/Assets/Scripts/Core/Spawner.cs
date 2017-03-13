@@ -10,6 +10,7 @@ public class Spawner : MonoBehaviour {
     public List<Shape> m_AllNextShape;
 
     public GameObject[] queueSpace;
+    public Transform m_spawnFx;
 
 
 
@@ -39,6 +40,7 @@ public class Spawner : MonoBehaviour {
 
         Shape nextShape = null;
         nextShape = GetNextShape();
+        m_spawnFx.GetComponent<Particles>().PlayParticle();
         // Shape shape = Instantiate(nextShape, transform.position, Quaternion.identity) as Shape;
 
         //shape = GetNextShape();
