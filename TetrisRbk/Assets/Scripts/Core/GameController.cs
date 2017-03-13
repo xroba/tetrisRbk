@@ -241,6 +241,7 @@ public class GameController : MonoBehaviour {
 
         if (m_board.m_completedRows > 0)
         {
+            Debug.Log("scoremangerScoreln = " + m_board.m_completedRows);
             m_scoreManager.ScoreLines(m_board.m_completedRows);
             
             if(m_scoreManager.m_didLevelUp)
