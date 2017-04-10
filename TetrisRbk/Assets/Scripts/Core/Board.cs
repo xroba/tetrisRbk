@@ -157,17 +157,28 @@ public class Board : MonoBehaviour {
         m_completedRows = 0; //for scoring :-)
 
         StartCoroutine("PlayRowDeleteFxRoutine");
-       // PlayRowDeleteFxRoutine();
+        // PlayRowDeleteFxRoutine();
 
-       // PlayRowDeleteFx();
-       // yield return new WaitForSeconds(0.3f);
+        // PlayRowDeleteFx();
+        // yield return new WaitForSeconds(0.3f);
+
+        //forScoring
+        for (int y = 0; y < m_height; y++)
+        {
+           // if (IsCompleteLine(y))
+           // {
+                m_completedRows++;
+           // }
+        }
+
+
 
         for (int y = 0; y < m_height; y++)
         {
+           
             if (IsCompleteLine(y))
             {
-                ClearRow(y);
-                m_completedRows++;
+                ClearRow(y);               
                 ShiftRowsDown(y + 1);
                 yield return new WaitForSeconds(0.3f);
                 y--;
