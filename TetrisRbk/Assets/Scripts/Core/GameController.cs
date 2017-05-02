@@ -248,9 +248,13 @@ public class GameController : MonoBehaviour {
             {
                 m_soundManager.PlayVocalLevelUp();
                 // m_dropIntervalModded -=  0.1f * m_scoreManager.m_level;
-                float dropInterval = Mathf.Clamp(0.1f * m_scoreManager.m_level,1f,2f);
+                float dropInterval = Mathf.Clamp(0.01f * m_scoreManager.m_level,0.1f,0.1f);
                 Debug.Log("m_clamp = " + m_dropIntervalModded);
                 m_dropIntervalModded -= dropInterval;
+                if (m_dropIntervalModded < 0)
+                {
+                    m_dropIntervalModded = 0.1f;
+                }
 
                 Debug.Log("m_dropIntervalModded = " + m_dropIntervalModded);
 
