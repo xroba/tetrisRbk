@@ -156,25 +156,34 @@ public class Board : MonoBehaviour {
     {
         m_completedRows = 0; //for scoring :-)
 
-        PlayRowDeleteFx();
-        yield return new WaitForSeconds(0.3f);
+        StartCoroutine("PlayRowDeleteFxRoutine");
+        // PlayRowDeleteFxRoutine();
 
+        // PlayRowDeleteFx();
+        // yield return new WaitForSeconds(0.3f);
+
+        //forScoring
         for (int y = 0; y < m_height; y++)
         {
-            if (IsCompleteLine(y))
-            {
-
-                ClearRow(y);
+           // if (IsCompleteLine(y))
+           // {
                 m_completedRows++;
-                ShiftRowsDown(y + 1);
-                yield return new WaitForSeconds(0.2f);
-                y--;
-
-            }
+           // }
         }
 
 
 
+        for (int y = 0; y < m_height; y++)
+        {
+           
+            if (IsCompleteLine(y))
+            {
+                ClearRow(y);               
+                ShiftRowsDown(y + 1);
+                yield return new WaitForSeconds(0.3f);
+                y--;
+            }
+        }
     }
 
     //public void ClearAllRows()
@@ -208,14 +217,13 @@ public class Board : MonoBehaviour {
         return false;
     }
 
-    public void PlayRowDeleteFx()
+    public IEnumerator PlayRowDeleteFxRoutine()
     {
 
-        for(int y = 0; y < m_height; y++){
+        for (int y = 0; y < m_height; y++){
 
             if (IsCompleteLine(y))
             {
-
                Transform rowGlowFx = Instantiate(m_rowGlowFx);
                 rowGlowFx.transform.position = new Vector3(0f, y, -1.1f);
                // Debug.Log("Play row fx on y = " + y);
@@ -223,6 +231,7 @@ public class Board : MonoBehaviour {
 
                 particles.PlayParticle();
                 StartCoroutine(KillingMyself(rowGlowFx));
+                yield return new WaitForSeconds(0.2f);
             }
         }
     }
