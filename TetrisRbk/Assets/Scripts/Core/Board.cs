@@ -165,10 +165,10 @@ public class Board : MonoBehaviour {
         //forScoring
         for (int y = 0; y < m_height; y++)
         {
-           // if (IsCompleteLine(y))
-           // {
+            if (IsCompleteLine(y))
+            {
                 m_completedRows++;
-           // }
+            }
         }
 
 

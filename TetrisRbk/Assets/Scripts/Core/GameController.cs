@@ -328,4 +328,9 @@ public class GameController : MonoBehaviour {
         Time.timeScale = (m_isPause) ? 0 : 1;
 
     }
+
+    public void ReturnToIntroScene()
+    {
+        SceneManager.LoadScene("intro");
+    }
 }

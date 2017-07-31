@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Holder : MonoBehaviour {
 
-    private float scale = 0.5f;
+    private float scale = 0.4f;
     public Transform xFormHolder;
     public Shape holdShape;
 
